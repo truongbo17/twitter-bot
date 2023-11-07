@@ -61,15 +61,21 @@ function scroll(element) {
   });
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function returnScript() {
+  // const scrollDirection = getRandomInt(0, 1) === 0 ? 1 : -1; // Ngẫu nhiên chọn hướng cuộn lên hoặc xuống
+  // const scrollAmount = getRandomInt(1, 5); // Ngẫu nhiên chọn số pixel cuộn (1-5, tùy chỉnh theo nhu cầu)
+  //
+  // return 'window.scrollBy(0, ', pixels, ');'
+
+  console.log(pixels)
+  return 'window.scrollBy(0, ' + pixels + ')';
+
   var script = [
-    'if(document.title.includes(\'Google Sheets\')){',
-
-    '}else if(document.title.includes(\'Google Doc\')){',
-
-    '}else{',
     'window.scrollBy(0, ', pixels, ');',
-    '}'
   ];
 
   var joinedScript = script.join('');
