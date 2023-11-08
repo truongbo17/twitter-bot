@@ -2,16 +2,21 @@
   "name": "Twitter Bot",
   "version": "1.0",
   "description": "Twitter Bot and Click Ads !",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
-  "browser_action": {
-    "default_popup": "popup.html",
+  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "notifications", "scripting"],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
     "default_icon": {
       "128": "images/scroll.png"
-    }
+    },
+    "default_title": "Twitter Bot",
+    "default_popup": "popup.html"
   },
   "icons": {
       "128": "images/scroll.png",
       "48": "images/scroll copy.png"
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }
