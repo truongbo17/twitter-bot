@@ -69,7 +69,12 @@ function startBotPlay() {
 }
 
 function scroll() {
-  executeScript('window.scrollBy(0, ' + scroll_level_3.pixel + ')');
+  chrome.scripting.executeScript({
+    target: { tabId: currentTab.id },
+    func: () => {
+      window.scrollBy(0, 1)
+    },
+  });
 }
 
 
