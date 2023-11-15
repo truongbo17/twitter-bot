@@ -58,8 +58,8 @@ async function startBotPlay() {
     func: () => {
       const elements = document.querySelectorAll(".title-news");
       const elementsInViewport = Array.from(elements).filter(element => {
-        const rect = element.getBoundingClientRect();
-        return (rect.top >= 0 && rect.left >= 0 && rect.right <= window.innerWidth && rect.bottom <= window.innerHeight);
+        const bounding = element.getBoundingClientRect();
+        return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
       });
       console.log(elementsInViewport)
     },
