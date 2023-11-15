@@ -50,11 +50,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 startBot.onclick = startBotPlay;
 stopBot.onclick = stopBotPlay;
 
-function startBotPlay() {
+async function startBotPlay() {
   clearTimeout(runScroll);
 
   chrome.scripting.executeScript({
-    target: { tabId: currentTab.id },
+    target: {tabId: currentTab.id},
     func: () => {
       const elements = document.querySelectorAll(".title-news");
       const elementsInViewport = Array.from(elements).filter(element => {
@@ -65,15 +65,20 @@ function startBotPlay() {
     },
   });
 
-  runScroll = setInterval(scroll, scroll_level_3.timeout);
+  await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
+
+  runScroll = setInterval(await scroll, scroll_level_3.timeout);
 }
 
-function scroll() {
+async function scroll() {
+  const scroll_pixel = await chrome.storage.session.get('scroll_pixel');
+
   chrome.scripting.executeScript({
-    target: { tabId: currentTab.id },
-    func: () => {
-      window.scrollBy(0, 1)
+    target: {tabId: currentTab.id},
+    func: (scroll_pixel) => {
+      window.scrollBy(0, scroll_pixel)
     },
+    args: [scroll_pixel.scroll_pixel]
   });
 }
 
