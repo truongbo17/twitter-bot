@@ -51,13 +51,45 @@ document.addEventListener("DOMContentLoaded", function(event) {
 startBot.onclick = startBotPlay;
 stopBot.onclick = stopBotPlay;
 
+function findCeil(arr, r, l, h)
+{
+  let mid;
+  while (l < h)
+  {
+    mid = l + ((h - l) >> 1); // Same as mid = (l+h)/2
+    (r > arr[mid]) ? (l = mid + 1) : (h = mid);
+  }
+  return (arr[l] >= r) ? l : -1;
+}
+
+function myRand(arr, freq,  n) {
+  let prefix= [];
+  let i;
+  prefix[0] = freq[0];
+  for (i = 1; i < n; ++i)
+    prefix[i] = prefix[i - 1] + freq[i];
+  let r = Math.floor((Math.random()* prefix[n - 1])) + 1;
+
+  let indexc = findCeil(prefix, r, 0, n - 1);
+  return arr[indexc];
+}
+
+// Driver code
+let arr = [scroll_level_1, scroll_level_2, scroll_level_3, scroll_level_4];
+let freq = [10, 5, 20, 100];
+let i;
+let n = arr.length;
+
+for (i = 0; i < 5; i++)
+  document.write(myRand(arr, freq, n));
+
 async function startBotPlay() {
   clearTimeout(runScroll);
 
-  await chrome.storage.session.set({scroll_pixel: scroll_level_6.pixel});
-  await chrome.storage.session.set({scroll_timeout: scroll_level_6.timeout});
+  await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
+  await chrome.storage.session.set({scroll_timeout: scroll_level_3.timeout});
 
-  runScroll = setInterval(await scroll, scroll_level_6.timeout);
+  runScroll = setInterval(await scroll, scroll_level_3.timeout);
 }
 
 async function scroll() {
@@ -79,25 +111,30 @@ async function scroll() {
         localStorage.setItem('count_get_e', '0')
       }
       let count_for_get_e = parseInt(localStorage.getItem('count_get_e'))
+
       count_for_get_e++
       localStorage.setItem('count_get_e', count_for_get_e.toString())
 
-      const rate = (2000 / scroll_timeout - scroll_pixel) * (Math.floor(Math.random() * 500).toFixed())
+      const rate = (1500 / scroll_timeout - scroll_pixel) + parseInt(Math.floor(Math.random() * 500).toFixed())
 
-      if (count_for_get_e === rate) {
-        const elements = document.querySelectorAll('[data-testid="like"]');
-        const elementsInViewport = Array.from(elements).filter(element => {
-          const bounding = element.getBoundingClientRect();
-          return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
-        });
-
-        const elementClick = elementsInViewport[(Math.floor(Math.random() * elementsInViewport.length))];
-        if (elementClick) {
-          elementClick.click()
-        }
-
+      if (count_for_get_e > 1000) {
         localStorage.setItem('count_get_e', '0')
       }
+
+      // if (count_for_get_e === 1000) {
+      //   const elements = document.querySelectorAll('[data-testid="like"]');
+      //   const elementsInViewport = Array.from(elements).filter(element => {
+      //     const bounding = element.getBoundingClientRect();
+      //     return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
+      //   });
+      //
+      //   const elementClick = elementsInViewport[(Math.floor(Math.random() * elementsInViewport.length))];
+      //   if (elementClick) {
+      //     elementClick.click()
+      //   }
+      //
+      //   localStorage.setItem('count_get_e', '0')
+      // }
     },
     args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel]
   });
