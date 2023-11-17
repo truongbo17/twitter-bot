@@ -54,13 +54,15 @@ stopBot.onclick = stopBotPlay;
 async function startBotPlay() {
   clearTimeout(runScroll);
 
-  await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
+  await chrome.storage.session.set({scroll_pixel: scroll_level_6.pixel});
+  await chrome.storage.session.set({scroll_timeout: scroll_level_6.timeout});
 
-  runScroll = setInterval(await scroll, scroll_level_3.timeout);
+  runScroll = setInterval(await scroll, scroll_level_6.timeout);
 }
 
 async function scroll() {
   const scroll_pixel = await chrome.storage.session.get('scroll_pixel');
+  const scroll_timeout = await chrome.storage.session.get('scroll_timeout');
 
   chrome.scripting.executeScript({
     target: {tabId: currentTab.id},
@@ -72,7 +74,7 @@ async function scroll() {
 
   chrome.scripting.executeScript({
     target: {tabId: currentTab.id},
-    func: () => {
+    func: (scroll_timeout, scroll_pixel) => {
       if (localStorage.getItem("count_get_e") === null || localStorage.getItem("count_get_e") == 'NaN') {
         localStorage.setItem('count_get_e', '0')
       }
@@ -80,7 +82,9 @@ async function scroll() {
       count_for_get_e++
       localStorage.setItem('count_get_e', count_for_get_e.toString())
 
-      if (count_for_get_e === 1000) {
+      const rate = (2000 / scroll_timeout - scroll_pixel) * (Math.floor(Math.random() * 500).toFixed())
+
+      if (count_for_get_e === rate) {
         const elements = document.querySelectorAll('[data-testid="like"]');
         const elementsInViewport = Array.from(elements).filter(element => {
           const bounding = element.getBoundingClientRect();
@@ -94,7 +98,8 @@ async function scroll() {
 
         localStorage.setItem('count_get_e', '0')
       }
-    }
+    },
+    args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel]
   });
 }
 
