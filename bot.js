@@ -1,6 +1,7 @@
 const startBot = document.getElementById('startBot');
 const stopBot = document.getElementById('stopBot');
 let runScroll, currentTab;
+let countScroll = 0;
 
 // Cuộn rất nhanh và rất mượt
 const scroll_level_1 = {
@@ -53,18 +54,6 @@ stopBot.onclick = stopBotPlay;
 async function startBotPlay() {
   clearTimeout(runScroll);
 
-  chrome.scripting.executeScript({
-    target: {tabId: currentTab.id},
-    func: () => {
-      const elements = document.querySelectorAll(".title-news");
-      const elementsInViewport = Array.from(elements).filter(element => {
-        const bounding = element.getBoundingClientRect();
-        return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
-      });
-      console.log(elementsInViewport)
-    },
-  });
-
   await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
 
   runScroll = setInterval(await scroll, scroll_level_3.timeout);
@@ -79,6 +68,33 @@ async function scroll() {
       window.scrollBy(0, scroll_pixel)
     },
     args: [scroll_pixel.scroll_pixel]
+  });
+
+  chrome.scripting.executeScript({
+    target: {tabId: currentTab.id},
+    func: () => {
+      if (localStorage.getItem("count_get_e") === null || localStorage.getItem("count_get_e") == 'NaN') {
+        localStorage.setItem('count_get_e', '0')
+      }
+      let count_for_get_e = parseInt(localStorage.getItem('count_get_e'))
+      count_for_get_e++
+      localStorage.setItem('count_get_e', count_for_get_e.toString())
+
+      if (count_for_get_e === 1000) {
+        const elements = document.querySelectorAll('[data-testid="like"]');
+        const elementsInViewport = Array.from(elements).filter(element => {
+          const bounding = element.getBoundingClientRect();
+          return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
+        });
+
+        const elementClick = elementsInViewport[(Math.floor(Math.random() * elementsInViewport.length))];
+        if (elementClick) {
+          elementClick.click()
+        }
+
+        localStorage.setItem('count_get_e', '0')
+      }
+    }
   });
 }
 
