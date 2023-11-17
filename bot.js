@@ -89,12 +89,23 @@ async function startBotPlay() {
   await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
   await chrome.storage.session.set({scroll_timeout: scroll_level_3.timeout});
 
+  fetch("./comment.text")
+      .then((res) => res.text())
+      .then((text) => {
+        console.log(text)
+      })
+      .catch((e) => console.error(e));
+
+  await chrome.storage.local.set({ comments: 123123 })
+
   runScroll = setInterval(await scroll, scroll_level_3.timeout);
 }
 
 async function scroll() {
   const scroll_pixel = await chrome.storage.session.get('scroll_pixel');
   const scroll_timeout = await chrome.storage.session.get('scroll_timeout');
+
+  console.log(await chrome.storage.local.get('comments'))
 
   chrome.scripting.executeScript({
     target: {tabId: currentTab.id},
@@ -139,7 +150,7 @@ async function scroll() {
         localStorage.setItem('count_get_e', '0')
       }
     },
-    args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel, contentString]
+    args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel]
   });
 }
 
