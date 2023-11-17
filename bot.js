@@ -89,6 +89,7 @@ async function startBotPlay() {
   await chrome.storage.session.set({scroll_pixel: scroll_level_3.pixel});
   await chrome.storage.session.set({scroll_timeout: scroll_level_3.timeout});
 
+  // https://raw.githubusercontent.com/MartinStyk/quotes-recommender/master/data/quotes.csv
   fetch("./comment.text")
       .then((res) => res.text())
       .then((text) => {
