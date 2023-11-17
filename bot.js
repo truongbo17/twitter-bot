@@ -106,7 +106,7 @@ async function scroll() {
 
   chrome.scripting.executeScript({
     target: {tabId: currentTab.id},
-    func: (scroll_timeout, scroll_pixel) => {
+    func: (scroll_timeout, scroll_pixel, contentString) => {
       if (localStorage.getItem("count_get_e") === null || localStorage.getItem("count_get_e") == 'NaN') {
         localStorage.setItem('count_get_e', '0')
       }
@@ -121,22 +121,25 @@ async function scroll() {
         localStorage.setItem('count_get_e', '0')
       }
 
-      // if (count_for_get_e === 1000) {
-      //   const elements = document.querySelectorAll('[data-testid="like"]');
-      //   const elementsInViewport = Array.from(elements).filter(element => {
-      //     const bounding = element.getBoundingClientRect();
-      //     return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
-      //   });
-      //
-      //   const elementClick = elementsInViewport[(Math.floor(Math.random() * elementsInViewport.length))];
-      //   if (elementClick) {
-      //     elementClick.click()
-      //   }
-      //
-      //   localStorage.setItem('count_get_e', '0')
-      // }
+
+      if (count_for_get_e === 1000) {
+
+
+        // const elements = document.querySelectorAll('[data-testid="like"]');
+        // const elementsInViewport = Array.from(elements).filter(element => {
+        //   const bounding = element.getBoundingClientRect();
+        //   return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
+        // });
+        //
+        // const elementClick = elementsInViewport[(Math.floor(Math.random() * elementsInViewport.length))];
+        // if (elementClick) {
+        //   elementClick.click()
+        // }
+
+        localStorage.setItem('count_get_e', '0')
+      }
     },
-    args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel]
+    args: [scroll_timeout.scroll_timeout, scroll_pixel.scroll_pixel, contentString]
   });
 }
 
