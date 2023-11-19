@@ -111,14 +111,10 @@ async function runBot() {
       }
 
       function commentAction() {
-        const elements = document.querySelectorAll('[data-testid="reply"]');
-        const elementsInViewport = Array.from(elements).filter(element => {
-          const bounding = element.getBoundingClientRect();
-          return (bounding.top >= 0 && bounding.left >= 0 && bounding.right <= window.innerWidth && bounding.bottom <= window.innerHeight);
-        });
+        const elementClick = getElementInViewPort('[data-testid="reply"]', true)
 
-        if (elementsInViewport[0]) {
-          elementsInViewport[0].click()
+        if (elementClick[0]) {
+          elementClick[0].click()
 
           chrome.storage.session.set({is_scroll: false})
 
